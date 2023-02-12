@@ -1,0 +1,43 @@
+import csv
+
+''' This script was used in my last job to change a column from an excel
+    containing urls. The starting part was the domain not
+    the https link so i had to change it.
+    They were 800 urls to transform so i made this script
+    to not die in the process if i had to make it manually which
+    probably would have taken me a week to do '''
+
+def main():
+    df = pd.read_excel('Urls.xlsx', usecols=[0])
+    urls = df.values.tolist()
+    new_urls = []
+    transformed_urls = []
+    string = ""
+
+    for u in urls:
+
+        string = ' ' + str(u)
+        string = string.strip("[']")
+        new_urls.append(string[22:]) # Position needed to change
+
+    print(new_urls)
+
+    wb = Workbook()
+    wb.create_sheet("Hoja1")
+    ws1 = wb["Hoja1"]
+
+    row_start = 1
+    col_start = 1
+
+    for i in range(0,len(new_urls)):
+
+        string = "https://example.com/" + str(new_urls[i]) # Part to include
+        string = string.strip("[']")
+        transformed_urls.append(string)
+        
+    for a in range(0,len(transformed_urls)):    
+        ws1.cell(row_start+a, col_start).value = transformed_urls[a]
+
+    wb.save("UrlsTransformadas.xlsx")
+
+main()
